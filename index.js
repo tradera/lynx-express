@@ -30,6 +30,7 @@ function factory(client) { // Client is a Lynx StatsD client
   return function (options) {
     options = options || {};
     var timeByUrl = options.timeByUrl || false;
+    var groupUnknownRoutes = options.groupUnknownRoutes || false;
 
     return function (req, res, next) {
       var startTime = new Date();
@@ -60,7 +61,7 @@ function factory(client) { // Client is a Lynx StatsD client
             }
             routeName = req.method + '_' + routeName;
           }
-          else if (req.url) { // Required to pickup static routes
+          else if (req.url && !groupUnknownRoutes) { // Required to pickup static routes
             routeName = req.method + '_' + req.url;
           }
 
